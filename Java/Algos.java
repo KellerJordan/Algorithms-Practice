@@ -1,4 +1,4 @@
-public class Algos {
+class Algos {
     public void selectionSort(int[] A) {
         int n = A.length;
         for (int i = 0; i < n - 1; i++) {
@@ -13,7 +13,7 @@ public class Algos {
         int n = A.length;
         for (int i = 1; i < n; i++) {
             int v = A[i], p = i; // v is the element being looked at
-            for (; p < 0 && A[p - 1] > v; p--)
+            for (; p > 0 && A[p - 1] > v; p--)
                 A[p] = A[p - 1]; // shift elements between v and the index it should be at
             A[p] = v; // put v into empty slot
         }
