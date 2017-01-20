@@ -14,8 +14,7 @@ class Client {
     }
 
     public static void main(String[] args) {
-        int n1, n2;
-        int[] A;
+        int n1, n2; int[] A;
         Sorts sortAlgos = new Sorts();
         long start, t1, t2;
 
@@ -31,5 +30,9 @@ class Client {
         // n1 = 100000; A = new int[n1]; fillArr(A); start = System.nanoTime(); sortAlgos.selectionSort(A); t1 = (System.nanoTime() - start) / 1000000;
         // n2 = 1000000; A = new int[n2]; fillArr(A); start = System.nanoTime(); sortAlgos.selectionSort(A); t2 = (System.nanoTime() - start) / 1000000;
         // System.out.printf("Selection sort took %d times as long with %d times the n.\n", t2/t1, n2/n1);
+        // bubble sort
+        n1 = 20000; A = new int[n1]; fillArr(A); start = System.nanoTime(); sortAlgos.bubbleSort(A); t1 = (System.nanoTime() - start) / 1000000;
+        n2 = 200000; A = new int[n2]; fillArr(A); start = System.nanoTime(); sortAlgos.bubbleSort(A); t2 = (System.nanoTime() - start) / 1000000;
+        System.out.printf("Bubble sort took %d times as long with %d times the n.\n", t2/t1, n2/n1);
     }
 }

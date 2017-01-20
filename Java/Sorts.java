@@ -20,7 +20,10 @@ class Sorts {
     }
     
     public void bubbleSort(int[] A) {
-        int n = A.length;
+        for (int i = A.length - 1; i > 1; i--) {
+            for (int j = 0; j < i; j++)
+                if (A[j] > A[j + 1]) swap(A, j, j + 1);
+        }
     }
 
     public void quickSort(int[] A) {
