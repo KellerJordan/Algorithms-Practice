@@ -15,20 +15,24 @@ class Client {
 
     public static void main(String[] args) {
         int n1, n2; int[] A;
-        Algos myAlgos = new Algos();
+        Sorts sortAlgos = new Sorts();
         long start, t1, t2;
 
         // merge sort
-        // n1 = 1000000; A = new int[n1]; fillArr(A); start = System.nanoTime(); myAlgos.mergeSort(A); t1 = (System.nanoTime() - start) / 1000000;
-        // n2 = 10000000; A = new int[n2]; fillArr(A); start = System.nanoTime(); myAlgos.mergeSort(A); t2 = (System.nanoTime() - start) / 1000000;
+        // n1 = 1000000; A = new int[n1]; fillArr(A); start = System.nanoTime(); sortAlgos.mergeSort(A); t1 = (System.nanoTime() - start) / 1000000;
+        // n2 = 10000000; A = new int[n2]; fillArr(A); start = System.nanoTime(); sortAlgos.mergeSort(A); t2 = (System.nanoTime() - start) / 1000000;
         // System.out.printf("Merge sort took %d times as long with %d times the n.\n", t2/t1, n2/n1);
         // // insertion sort
-        // n1 = 40000; A = new int[n1]; fillArr(A); start = System.nanoTime(); myAlgos.insertionSort(A); t1 = (System.nanoTime() - start) / 1000000;
-        // n2 = 400000; A = new int[n2]; fillArr(A); start = System.nanoTime(); myAlgos.insertionSort(A); t2 = (System.nanoTime() - start) / 1000000;
+        // n1 = 40000; A = new int[n1]; fillArr(A); start = System.nanoTime(); sortAlgos.insertionSort(A); t1 = (System.nanoTime() - start) / 1000000;
+        // n2 = 400000; A = new int[n2]; fillArr(A); start = System.nanoTime(); sortAlgos.insertionSort(A); t2 = (System.nanoTime() - start) / 1000000;
         // System.out.printf("Insertion sort took %d times as long with %d times the n.\n", t2/t1, n2/n1);
         // // selection sort
-        // n1 = 100000; A = new int[n1]; fillArr(A); start = System.nanoTime(); myAlgos.selectionSort(A); t1 = (System.nanoTime() - start) / 1000000;
-        // n2 = 1000000; A = new int[n2]; fillArr(A); start = System.nanoTime(); myAlgos.selectionSort(A); t2 = (System.nanoTime() - start) / 1000000;
+        // n1 = 100000; A = new int[n1]; fillArr(A); start = System.nanoTime(); sortAlgos.selectionSort(A); t1 = (System.nanoTime() - start) / 1000000;
+        // n2 = 1000000; A = new int[n2]; fillArr(A); start = System.nanoTime(); sortAlgos.selectionSort(A); t2 = (System.nanoTime() - start) / 1000000;
         // System.out.printf("Selection sort took %d times as long with %d times the n.\n", t2/t1, n2/n1);
+        // bubble sort
+        n1 = 20000; A = new int[n1]; fillArr(A); start = System.nanoTime(); sortAlgos.bubbleSort(A); t1 = (System.nanoTime() - start) / 1000000;
+        n2 = 200000; A = new int[n2]; fillArr(A); start = System.nanoTime(); sortAlgos.bubbleSort(A); t2 = (System.nanoTime() - start) / 1000000;
+        System.out.printf("Bubble sort took %d times as long with %d times the n.\n", t2/t1, n2/n1);
     }
 }
