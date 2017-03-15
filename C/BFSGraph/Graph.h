@@ -29,5 +29,4 @@ void BFS(Graph G, int s);
 // Other operations -----------------------------------------------------------
 void printGraph(FILE* out, Graph G);
 
-
 #endif

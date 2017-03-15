@@ -13,6 +13,7 @@ int main(int argc, char* argv[]){
    List S = newList();
    Graph G = newGraph(n);
    Graph T=NULL, C=NULL;
+int parent;
 
    for(i=1; i<=n; i++) append(S, i);
 
@@ -35,7 +36,9 @@ int main(int argc, char* argv[]){
    fprintf(stdout, "\n");
    fprintf(stdout, "x:  d  f  p\n");
    for(i=1; i<=n; i++){
-      fprintf(stdout, "%d: %2d %2d %2d\n", i, getDiscover(G, i), getFinish(G, i), getParent(G, i));
+  parent=getParent(G, i);
+   if(parent<=0) parent=0;
+      fprintf(stdout, "%d: %2d %2d %2d\n", i, getDiscover(G, i), getFinish(G, i), parent);
    }
    fprintf(stdout, "\n");
    printList(stdout, S);
@@ -53,7 +56,9 @@ int main(int argc, char* argv[]){
    fprintf(stdout, "\n");
    fprintf(stdout, "x:  d  f  p\n");
    for(i=1; i<=n; i++){
-      fprintf(stdout, "%d: %2d %2d %2d\n", i, getDiscover(T, i), getFinish(T, i), getParent(T, i));
+parent=getParent(T, i);
+   if(parent<=0) parent=0;
+      fprintf(stdout, "%d: %2d %2d %2d\n", i, getDiscover(T, i), getFinish(T, i), parent);
    }
    fprintf(stdout, "\n");
    printList(stdout, S);

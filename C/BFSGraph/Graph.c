@@ -1,4 +1,4 @@
-// Graph with DFS algorithm
+// Graph ADT with BFS
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -39,16 +39,16 @@ Graph newGraph(int n) {
     return G;
 }
 
-void freeGraph(Graph* pG) {
-    Graph G = *pG;
+void freeGraph(Graph *pG) {
     if (pG != NULL && *pG != NULL) {
-        for (int i = 1; i <= (*pG)->order; i++)
+        Graph G = *pG;
+        for (int i = 1; i <= G->order; i++)
             freeList(&(G->edges[i]));
         free(G->edges);
         free(G->color);
         free(G->p);
         free(G->d);
-        free(*pG);
+        free(G);
         *pG = NULL;
     }
 }
@@ -96,7 +96,6 @@ void getPath(List L, Graph G, int u) {
             v = G->p[v];
         }
     }
-    
 }
 
 

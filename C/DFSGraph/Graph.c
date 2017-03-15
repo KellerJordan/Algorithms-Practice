@@ -1,4 +1,4 @@
-// Graph with BFS algorithm
+// Graph ADT with DFS
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -12,9 +12,9 @@ typedef struct GraphObj {
     int *color,
         *p,
         *d,
+        *f,
         order,
-        size,
-        source;
+        size;
 } GraphObj;
 
 
@@ -27,28 +27,30 @@ Graph newGraph(int n) {
     G->color = malloc(sizeof(int) * len);
     G->p = malloc(sizeof(int) * len);
     G->d = malloc(sizeof(int) * len);
+    G->f = malloc(sizeof(int) * len);
     for (int i = 1; i <= n; i++) {
         G->edges[i] = newList();
         G->color[i] = 0;
         G->p[i] = NIL;
-        G->d[i] = INF;
+        G->d[i] = UNDEF;
+        G->f[i] = UNDEF;
     }
     G->order = n;
     G->size = 0;
-    G->source = NIL;
     return G;
 }
 
-void freeGraph(Graph* pG) {
-    Graph G = *pG;
+void freeGraph(Graph *pG) {
     if (pG != NULL && *pG != NULL) {
-        for (int i = 1; i <= (*pG)->order; i++)
+        Graph G = *pG;
+        for (int i = 1; i <= G->order; i++)
             freeList(&(G->edges[i]));
         free(G->edges);
         free(G->color);
         free(G->p);
         free(G->d);
-        free(*pG);
+        free(G->f);
+        free(G);
         *pG = NULL;
     }
 }
@@ -60,59 +62,39 @@ int getOrder(Graph G) { return G->order; }
 
 int getSize(Graph G) { return G->size; }
 
-int getSource(Graph G) { return G->source; }
-
 int getParent(Graph G, int u) {
-    if (0 >= u || u > getOrder(G)) {
+    if (1 > u || u > getOrder(G)) {
         printf("Graph Error: calling getParent() with out of bounds u\n");
         exit(1);
     }
     return G->p[u];
 }
 
-int getDist(Graph G, int u) {
-    if (0 >= u || u > getOrder(G)) {
-        printf("Graph Error: calling getDist() with out of bounds u\n");
+int getDiscover(Graph G, int u) {
+    if (1 > u || u > getOrder(G)) {
+        printf("Graph Error: calling getDiscover() with out of bounds u\n");
         exit(1);
     }
     return G->d[u];
 }
 
-void getPath(List L, Graph G, int u) {
-    if (getSource(G) == NIL) {
-        printf("Graph Error: calling getPath() on graph with no source\n");
+int getFinish(Graph G, int u) {
+    if (1 > u || u > getOrder(G)) {
+        printf("Graph Error: calling getFinish() with out of bounds u\n");
         exit(1);
     }
-    if (0 >= u || u > getOrder(G)) {
-        printf("Graph Error: calling getPath() with out of bounds u\n");
-        exit(1);
-    }
-    if (getDist(G, u) == INF)
-        prepend(L, NIL);
-    else {
-        int v = u;
-        while (v != 0) {
-            prepend(L, v);
-            v = G->p[v];
-        }
-    }
-    
+    return G->f[u];
 }
 
 
 // Manipulation procedures ----------------------------------------------------
 
-void makeNull(Graph G) {
-    for (int i = 1; i <= G->order; i++)
-        clear(G->edges[i]);
-}
-
 void addEdge(Graph G, int u, int v) {
-    if (0 >= u || u > getOrder(G)) {
+    if (1 > u || u > getOrder(G)) {
         printf("Graph Error: calling addEdge() with out of bounds u\n");
         exit(1);
     }
-    if (0 >= v || v > getOrder(G)) {
+    if (1 > v || v > getOrder(G)) {
         printf("Graph Error: calling addEdge() with out of bounds v\n");
         exit(1);
     }
@@ -143,11 +125,11 @@ void addEdge(Graph G, int u, int v) {
 }
 
 void addArc(Graph G, int u, int v) {
-    if (0 >= u || u > getOrder(G)) {
+    if (1 > u || u > getOrder(G)) {
         printf("Graph Error: calling addArc() with out of bounds u\n");
         exit(1);
     }
-    if (0 >= v || v > getOrder(G)) {
+    if (1 > v || v > getOrder(G)) {
         printf("Graph Error: calling addArc() with out of bounds v\n");
         exit(1);
     }
@@ -165,45 +147,75 @@ void addArc(Graph G, int u, int v) {
     G->size++;
 }
 
-void BFS(Graph G, int s) {
+// unchecked pre: S contains permutation of { 1, 2, ..., n }
+void DFS(Graph G, List S) {
+    if (length(S) != G->order) {
+        printf("Graph Error: calling DFS() with List of different length than Graph's order");
+        exit(1);
+    }
+
     // reset graph
     for (int i = 1; i <= G->order; i++) {
         G->color[i] = 0;
         G->p[i] = NIL;
-        G->d[i] = INF;
+        G->d[i] = UNDEF;
+        G->f[i] = UNDEF;
     }
+    int time = 1;
 
-    // setup base case
-    G->source = s;
-    List Q = newList();
-    append(Q, s);
-    G->color[s] = 1;
-    G->p[s] = NIL;
-    G->d[s] = 0;
-    
-    // iterate through reachable nodes
-    while (length(Q) > 0) {
-        int v = front(Q);
-        List L = G->edges[v];
+    // helper visit function which uses the time variable declared in this scope
+    void visit(int u) {
+        G->color[u] = 1;
+        G->d[u] = time++;
+
+        List L = G->edges[u];
         for (moveFront(L); index(L) != -1; moveNext(L)) {
-            int u = get(L);
-            if (G->color[u] == 0) {
-                append(Q, u);
-                G->color[u] = 1;
-                G->p[u] = v;
-                G->d[u] = G->d[v] + 1;
+            int v = get(L);
+            if (G->color[v] == 0) {
+                G->p[v] = u;
+                visit(v);
             }
         }
-        G->color[v] = 2;
-        deleteFront(Q);
+
+        G->color[u] = 2;
+        G->f[u] = time++;
+        prepend(S, u);
     }
 
-    // free objects
-    freeList(&Q);
+    for (moveFront(S); index(S) != -1; moveNext(S)) {
+        int u = get(S);
+        if (G->color[u] == 0) {
+            G->p[u] = NIL;
+            visit(u);
+        }
+    }
+    // clear ordering entries in back
+    for (int i = 1; i <= G->order; i++)
+        deleteBack(S);
 }
 
 
 // Other operations -----------------------------------------------------------
+
+Graph transpose(Graph G) {
+    Graph H = newGraph(G->order);
+    for (int i = 1; i <= G->order; i++) {
+        List L = G->edges[i];
+        for (moveFront(L); index(L) != -1; moveNext(L))
+            addArc(H, get(L), i);
+    }
+    return H;
+}
+
+Graph copyGraph(Graph G) {
+    Graph H = newGraph(G->order);
+    for (int i = 1; i <= G->order; i++) {
+        List L = G->edges[i];
+        for (moveFront(L); index(L) != -1; moveNext(L))
+            addArc(H, i, get(L));
+    }
+    return H;
+}
 
 void printGraph(FILE* out, Graph G) {
     for (int i = 1; i <= G->order; i++) {

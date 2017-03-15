@@ -1,4 +1,4 @@
-// Linked List with cursor
+// LinkedList ADT
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -29,7 +29,7 @@ Node newNode(int node_data) {
     return N;
 }
 
-void freeNode(Node* pN) {
+void freeNode(Node *pN) {
     if (pN!=NULL && *pN!=NULL) {
         free(*pN);
         *pN = NULL;
@@ -37,17 +37,17 @@ void freeNode(Node* pN) {
 }
 
 List newList(void) {
-    List L;
-    L = malloc(sizeof(ListObj));
+    List L = malloc(sizeof(ListObj));
     L->front = L->back = L->cursor = NULL;
     L->length = 0;
     return L;
 }
 
-void freeList(List* pL) {
+void freeList(List *pL) {
     if (pL != NULL && *pL != NULL) {
-        while ((*pL)->length > 0) deleteFront(*pL);
-        free(*pL);
+        List L = *pL;
+        while (L->length > 0) deleteFront(*pL);
+        free(L);
         *pL = NULL;
     }
 }
@@ -182,6 +182,7 @@ void prepend(List L, int data) {
     }
     L->front = N;
     L->length++;
+    L->index++;
 }
 
 void append(List L, int data) {
@@ -220,6 +221,7 @@ void insertBefore(List L, int data) {
     N->next = L->cursor;
     L->cursor->prev = N;
     L->length++;
+    L->index++;
 }
 
 void insertAfter(List L, int data) {
@@ -253,10 +255,16 @@ void deleteFront(List L) {
         printf("List Error: calling deleteFront() on empty List\n");
         exit(1);
     }
+
     Node N = L->front->next;
     freeNode(&(L->front));
+
     L->front = N;
-    if(N != NULL) N->prev = NULL;
+    if (N == NULL)
+        L->back = NULL;
+    else
+        N->prev = NULL;
+
     L->length--;
 }
 
@@ -269,10 +277,16 @@ void deleteBack(List L) {
         printf("List Error: calling deleteBack() on empty List\n");
         exit(1);
     }
+
     Node N = L->back->prev;
     freeNode(&(L->back));
+
     L->back = N;
-    if (N != NULL) N->next = NULL;
+    if (N == NULL)
+        L->front = NULL;
+    else
+        N->next = NULL;
+
     L->length--;
 }
 
@@ -285,11 +299,21 @@ void delete(List L) {
         printf("List Error: calling delete() on a List with no cursor\n");
         exit(1);
     }
+
     Node M = L->cursor->next;
     Node J = L->cursor->prev;
     freeNode(&(L->cursor));
-    if (M != NULL) M->prev = J;
-    if (J != NULL) J->next = M;
+
+    if (M == NULL)
+        L->back = J;
+    else
+        M->prev = J;
+
+    if (J == NULL)
+        L->front = M;
+    else
+        J->next = M;
+
     L->length--;
 }
 
@@ -303,8 +327,8 @@ void printList(FILE* out, List L) {
     }
     if (L->front != NULL) {
         for (Node N = L->front; N->next != NULL; N = N->next)
-        fprintf(out, "%d ", N->data);
-        fprintf(out, "%d", back(L));
+            fprintf(out, "%d ", N->data);
+        fprintf(out, "%d", L->back->data);
     }
     fprintf(out, "\n");
 }
