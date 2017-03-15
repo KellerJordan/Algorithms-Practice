@@ -15,12 +15,12 @@ int size(Heap H);
 int max(Heap H);
 
 // Manipulation procedures ----------------------------------------------------
-void insert(Heap H, int x);
+void insert(Heap H, int k);
 void heapify(Heap H, int i);
 void buildHeap(Heap H);
 void heapSort(Heap H);
-// int extractMax(Heap H);
-// void increaseKey(Heap H, int k0, int k);
+int extractMax(Heap H);
+void increaseKey(Heap H, int i, int k);
 
 // Other operations -----------------------------------------------------------
 void printHeap(Heap H);
