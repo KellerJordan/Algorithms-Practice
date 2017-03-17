@@ -1,4 +1,4 @@
-// max-priority queue with max-priority heap
+// max-priority heap
 
 #include <stdio.h>
 #include <stdlib.h>
