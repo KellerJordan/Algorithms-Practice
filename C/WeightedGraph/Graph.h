@@ -3,8 +3,8 @@
 #ifndef _GRAPH_H_INCLUDE_
 #define _GRAPH_H_INCLUDE_
 
+#define INF 536870912
 #define NIL 0
-#define UNDEF -1
 
 typedef struct GraphObj* Graph;
 
@@ -15,18 +15,17 @@ void freeGraph(Graph* pG);
 // Access functions -----------------------------------------------------------
 int getOrder(Graph G);
 int getSize(Graph G);
-int getParent(Graph G, int u); /* Pre: 1<=u<=n=getOrder(G) */
-int getDiscover(Graph G, int u); /* Pre: 1<=u<=n=getOrder(G) */
-int getFinish(Graph G, int u); /* Pre: 1<=u<=n=getOrder(G) */
+int getSource(Graph G);
+int getParent(Graph G, int u);
+int getDist(Graph G, int u);
+void getPath(List L, Graph G, int u);
 
 // Manipulation procedures ----------------------------------------------------
-void addArc(Graph G, int u, int v); /* Pre: 1<=u<=n, 1<=v<=n */
-void addEdge(Graph G, int u, int v); /* Pre: 1<=u<=n, 1<=v<=n */
-void DFS(Graph G, List S); /* Pre: length(S)==getOrder(G) */
+void addEdge(Graph G, int u, int v, int w);
+void Dijkstra(Graph G, int s);
+int BellmanFord(Graph G, int s);
 
 // Other operations -----------------------------------------------------------
-Graph transpose(Graph G);
-Graph copyGraph(Graph G);
-void printGraph(FILE* out , Graph G);
+void printGraph(FILE* out, Graph G);
 
 #endif

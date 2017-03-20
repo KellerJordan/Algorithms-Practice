@@ -25,7 +25,7 @@ int main() {
         printf("Enter K: ");
         scanf("%lf", &K);
 
-        printf("Result of using summation(): %.3f\n", summation(p, K));
+        printf("Result of using summation(): %.3f\n", summation(p, K-1));
         printf("Result of using formula(): %.3f\n", formula(p, K));
     }
 }

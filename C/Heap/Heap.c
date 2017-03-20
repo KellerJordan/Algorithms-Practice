@@ -100,9 +100,11 @@ void buildHeap(Heap H) {
 void heapSort(Heap H) {
     buildHeap(H);
     for (int i = H->size; i >= 1; i--) {
+        // swap 1 and i
         int t = H->k[i];
         H->k[i] = H->k[1];
         H->k[1] = t;
+        
         H->size--;
         heapify(H, 1);
     }
