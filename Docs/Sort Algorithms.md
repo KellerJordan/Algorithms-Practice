@@ -10,7 +10,7 @@ Best/Average/Worst O(nlog(n))
 
 ### Quick
 Pick a pivot element. Put all elements smaller on left, larger on right. Recursively quicksort each side.
-Best O(n) Average O(nlog(n)) Worst O(n^2)
+Best/Average O(nlog(n)) Worst O(n^2)
 
 ### Selection
 Iterate through array, swapping cursor with smallest element to it's right
