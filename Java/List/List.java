@@ -18,7 +18,7 @@ class List {
 
     public int length() { return length; }
     public int index() {
-        if (cursor == null) return -1;
+        if (cursor == null) index = -1;
         return index;
     }
     public int front() {
@@ -53,23 +53,19 @@ class List {
     }
     public void moveFront() {
         if (length() > 0) cursor = front;
-        if (cursor != null) index = 0;
-        else index = -1;
+        index = 0;
     }
     public void moveBack() {
         if (length() > 0) cursor = back;
-        if (cursor != null) index = length - 1;
-        else index = -1;
+        index = length - 1;
     }
     public void movePrev() {
         if (cursor != null) cursor = cursor.prev;
-        if (cursor != null) index--;
-        else index = -1;
+        index--;
     }
     public void moveNext() {
         if (cursor != null) cursor = cursor.next;
-        if (cursor != null) index++;
-        else index = -1;
+        index++;
     }
     public void prepend(int data) {
         Node N = new Node(data);
@@ -95,9 +91,8 @@ class List {
     public void insertBefore(int data) {
         if (length() == 0 || index() == -1) throw new RuntimeException("List Error: insertBefore() called List which is empty or has no cursor");
         Node N = new Node(data);
-        if (cursor == front) {
-            front = N;
-        } else {
+        if (cursor == front) front = N;
+        else {
             Node H = cursor.prev;
             N.prev = H;
             H.next = N;
@@ -110,16 +105,15 @@ class List {
     public void insertAfter(int data) {
         if (length() == 0 || index() == -1) throw new RuntimeException("List Error: insertAfter() called List which is empty or has no cursor");
         Node N = new Node(data);
-        if (cursor == back) {
-            back = N;
-        } else {
+        if (cursor == back) back = N;
+        else {
             Node H = cursor.next;
             N.next = H;
             H.prev = N;
         }
         N.prev = cursor;
         cursor.next = N;
-        length++;        
+        length++;
     }
     public void deleteFront() {
         if (length() == 0) throw new RuntimeException("List Error: deleteFront() called on empty List");
@@ -128,7 +122,6 @@ class List {
         front = N;
         if (N != null) N.prev = null;
         length--;
-        if (cursor == null) index = -1;
     }
     public void deleteBack() {
         if (length() == 0) throw new RuntimeException("List Error: deleteBack() called on empty List");
@@ -137,7 +130,6 @@ class List {
         back = N;
         if (N != null) N.next = null;
         length--;
-        if (cursor == null) index = -1;
     }
     public void delete() {
         if (length == 0 || cursor == null) throw new RuntimeException("List Error: delete() called List which is empty or has no cursor");
@@ -149,9 +141,8 @@ class List {
             N.prev = P;
             P.next = N;
         }
-        length--;
         cursor = null;
-        index = -1;
+        length--;
     }
 
     public String toString() {
