@@ -5,6 +5,7 @@ class Graph {
     private static final int INF = 10000000; // don't use edge weights of greater than 1000000 pls
     private static final int NIL = 0;
 
+    private String dStr(double d) { return d == INF ? "INF" : String.format("%.1f", d); }
     private class Edge {
         private int origin, terminus;
         private double weight;
@@ -16,7 +17,7 @@ class Graph {
         }
 
         public String toString() {
-            return String.format("(%d,%d)w%.2f", origin, terminus, weight);
+            return String.format("(%d,%d)w%s", origin, terminus, dStr(weight));
         }
     }
     private List edges[];       // array of LinkedList ADT which store Edge objects
@@ -60,20 +61,6 @@ class Graph {
         size++;
     }
 
-    private double getWeight(int origin, int terminus) {
-        if (origin < 1 || order < origin)
-            throw new RuntimeException("Graph Error: private getWeight() called with out of bounds origin");
-        if (terminus < 1 || order < terminus)
-            throw new RuntimeException("Graph Error: private getWeight() called with out of bounds terminus");
-
-        List L = edges[origin];
-        for (L.moveFront(); L.index() != -1; L.moveNext()) {
-            Edge E = (Edge)L.get();
-            if (E.terminus == terminus)
-                return E.weight;
-        }
-        return INF;
-    }
     private void Initialize(int s) {
         source = s;
         for (int i = 1; i <= order; i++) {
@@ -87,6 +74,7 @@ class Graph {
             double newWeight = d[E.origin] + E.weight;
             if (newWeight < d[E.terminus])
                 d[E.terminus] = newWeight;
+                p[E.terminus] = E.origin;
         }
     }
 
@@ -94,12 +82,22 @@ class Graph {
     public void Dijkstra(int s) {
         Initialize(s);
         List S = new List();
+        List Q = new List();
+        // fill Q
+        // for (int i = 1; i <= order; i++) Q.append(i);
+        // // sort Q by d[i]
+        // for ()
+
+        // while (Q.length() > 0) {
+        //     int m = 
+        // }
         // Relax();
     }
     // only works if no negative cycles
     public void BellmanFord(int s) {
         Initialize(s);
         for (int iter = 1; iter <= order; iter++) { // execute the following |V(G)| times
+            printStatus();
             // for each E in E(G), visit(E)
             for (int index = 1; index <= order; index++) {
                 List L = edges[index];
@@ -109,12 +107,15 @@ class Graph {
                 }
             }
         }
+        printStatus();
         // check for neg loops
     }
 
-    public void printDistances() {
+    public void printStatus() {
+        StringBuffer sb = new StringBuffer();
         for (int i = 1; i <= order; i++)
-            System.out.println(String.format("For v=%d, p=%d, d=%.2f", i, p[i], d[i]));
+            sb.append(String.format("(%d,%s) ", p[i], dStr(d[i])));
+        System.out.println(new String(sb)); 
     }
 
     public String toString() {

@@ -23,6 +23,5 @@ class GraphTest {
 
         G.BellmanFord(2);
         System.out.println();
-        G.printDistances();
     }
 }
