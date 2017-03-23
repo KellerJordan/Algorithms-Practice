@@ -136,11 +136,9 @@ class List {
         Node N = cursor.next;
         Node P = cursor.prev;
         if (cursor == front) front = N;
-        else if (cursor == back) back = N;
-        else {
-            N.prev = P;
-            P.next = N;
-        }
+        else if (cursor == back) back = P;
+        if (N != null) N.prev = P;
+        if (P != null) P.next = N;
         cursor = null;
         length--;
     }

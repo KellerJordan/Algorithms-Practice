@@ -69,7 +69,7 @@ class List {
     }
     public void prepend(Object data) {
         Node N = new Node(data);
-        if (length() == 0) front = back = N;
+        if (length == 0) front = back = N;
         else {
             front.prev = N;
             N.next = front;
@@ -80,7 +80,7 @@ class List {
     }
     public void append(Object data) {
         Node N = new Node(data);
-        if (length() == 0) front = back = N;
+        if (length == 0) front = back = N;
         else {
             back.next = N;
             N.prev = back;
@@ -136,11 +136,9 @@ class List {
         Node N = cursor.next;
         Node P = cursor.prev;
         if (cursor == front) front = N;
-        else if (cursor == back) back = N;
-        else {
-            N.prev = P;
-            P.next = N;
-        }
+        else if (cursor == back) back = P;
+        if (N != null) N.prev = P;
+        if (P != null) P.next = N;
         cursor = null;
         length--;
     }

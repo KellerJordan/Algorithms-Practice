@@ -72,37 +72,67 @@ class Graph {
     private void Relax(Edge E) {
         if (d[E.origin] != INF) {
             double newWeight = d[E.origin] + E.weight;
-            if (newWeight < d[E.terminus])
+            if (newWeight < d[E.terminus]) {
                 d[E.terminus] = newWeight;
                 p[E.terminus] = E.origin;
+            }
         }
+    }
+    private class Vertex {
+        int index;
+        Vertex(int index) { this.index = index; }
+        public String toString() { return String.format("%d", index); }
     }
 
     // only works for all positive weights
     public void Dijkstra(int s) {
         Initialize(s);
-        List S = new List();
+        // build vertex set Q
         List Q = new List();
-        // fill Q
-        // for (int i = 1; i <= order; i++) Q.append(i);
-        // // sort Q by d[i]
-        // for ()
+        for (int i = 1; i <= order; i++) {
+            Vertex V = new Vertex(i);
+            Q.append(V);
+        }
 
-        // while (Q.length() > 0) {
-        //     int m = 
-        // }
-        // Relax();
+        while (Q.length() > 0) {
+            printStatus();
+
+            int u = ((Vertex) Q.front()).index;
+            // find min element of Q over d
+            for (Q.moveFront(); Q.index() != -1; Q.moveNext()) {
+                Vertex V = (Vertex) Q.get();
+                if (d[V.index] < d[u])
+                    u = V.index;
+            }
+            // remove element from Q
+            for (Q.moveFront(); Q.index() != -1; Q.moveNext()) {
+                Vertex V = (Vertex) Q.get();
+                if (V.index == u) {
+                    Q.delete();
+                    break;
+                }
+            }
+
+            // relax all edges of u;
+            List L = edges[u];
+            for (L.moveFront(); L.index() != -1; L.moveNext()) {
+                Edge E = (Edge) L.get();
+                Relax(E);
+            }
+        }
+        printStatus();
     }
     // only works if no negative cycles
     public void BellmanFord(int s) {
         Initialize(s);
         for (int iter = 1; iter <= order; iter++) { // execute the following |V(G)| times
             printStatus();
+
             // for each E in E(G), visit(E)
             for (int index = 1; index <= order; index++) {
                 List L = edges[index];
                 for (L.moveFront(); L.index() != -1; L.moveNext()) {
-                    Edge E = (Edge)L.get();
+                    Edge E = (Edge) L.get();
                     Relax(E);
                 }
             }
@@ -114,7 +144,7 @@ class Graph {
     public void printStatus() {
         StringBuffer sb = new StringBuffer();
         for (int i = 1; i <= order; i++)
-            sb.append(String.format("(%d,%s) ", p[i], dStr(d[i])));
+            sb.append(String.format("(%s,%d) ", dStr(d[i]), p[i]));
         System.out.println(new String(sb)); 
     }
 
