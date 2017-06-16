@@ -1,4 +1,4 @@
-// Weighted DiGraph ADT
+// Weighted DiGraph ADT with Bellman-Ford, Dijkstra's, Kruskal's algorithms
 
 @SuppressWarnings("overrides")
 class Graph {
